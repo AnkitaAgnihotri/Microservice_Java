@@ -1,0 +1,13 @@
+- hosts: localhost
+  tasks:
+  - name: Build Docker Image with local docker registry tag
+    command: docker image build -t localhost:5000/devopsblog:v1 .
+    args:
+      chdir: /home/devops/capstone/DevOps-Blogging
+
+  - name: Push docker image onto dockerhub locally
+    command: docker push localhost:5000/devopsblog:v1
+
+  - name: Delete existing image so pull the latest images from docker registry locally
+    command: docker image rm localhost:5000/devopsblog:v1
+    ignore_errors: yes

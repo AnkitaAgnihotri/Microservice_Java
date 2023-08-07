@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: devopsblog
+  name: devopsblog-deploy
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  selector:
+    matchLabels:
+      app: devopsblog
+  template:
+    metadata:
+      labels:
+        app: devopsblog
+    spec:
+      containers:
+      - image: localhost:5000/devopsblog
+        name: devopsblog
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: devopsblog
+  name: devopsblog-svc
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+    nodePort: 30005
+  selector:
+    app: devopsblog
+  type: NodePort

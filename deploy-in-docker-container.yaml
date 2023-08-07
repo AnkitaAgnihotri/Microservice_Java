@@ -1,0 +1,17 @@
+- hosts: localhost
+
+  tasks:
+#  - name: Stop existing container if persent with same name
+#    command: docker container stop devopsblog
+#    ignore_errors: yes
+
+  - name: Delete existing container if persent with same name
+    command: docker container rm -f devopsblog
+    ignore_errors: yes
+
+  - name: Delete existing image so pull the latest images from dockerhub locally
+    command: docker image rmi localhost:5000/devopsblog:latest
+    ignore_errors: yes
+
+  - name: Create docker container
+    command: docker container run -d --name devopsblog -p 11011:8080 localhost:5000/devopsblog:latest

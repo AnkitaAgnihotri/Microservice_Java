@@ -1,0 +1,14 @@
+- hosts: localhost 
+  # become: true
+  user: devops
+ 
+  tasks: 
+  - name: Create a deployment and service on Kubernetes using deployment yaml file. 
+    command: kubectl apply -f k8s-devopsblog-deploy-svc.yaml
+ 
+  - name: Update deployment with new pods if image updated in docker hub
+    command: kubectl rollout restart deployment.apps/devopsblog-deploy
+
+  - name: Removing without tagging images from crictl image list
+    command: crictl rmi $(crictl images | grep "<none>" | awk '{print $3}')
+    ignore_errors: yes
